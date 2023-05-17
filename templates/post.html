@@ -1,0 +1,94 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% include "header.html" %}
+
+{% block styles %}
+{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='/css/clean-blog.css') }}">
+{% endblock %}
+
+{% block content %}
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('{{post.img_url}}')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="post-heading">
+            <h1>{{post.title}}</h1>
+            <h2 class="subheading">{{post.subtitle}}</h2>
+            <span class="meta">Posted by
+              <a class="remove" href="{{linkedin}}" target="_blank">{{post.author.name}}</a>
+              on {{post.date}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            {{ post.body | safe }}
+          <hr>
+          {% if current_user.get_id() == '1' %}
+            <div class="clearfix">
+              <a class="btn btn-primary float-right" href="{{url_for('edit_post', post_id=post.id)}}">Edit Post</a>
+              <a class="btn btn-outline-danger float-left mb-4" href="{{ url_for('delete_post', post_id=post.id) }}">✘</a>
+            </div>
+          {% endif %}
+
+          <hr>
+
+<!--           Comments Area -->
+          <div class="row comment-box">
+            <div class="col col-1"></div>
+            <div class="col col-10 comment">
+              <ul class="commentList">
+                <li>
+                  <div class="commentContainer">
+                    {% for comment in comments %}
+                      {% if comment.post_comment_id == post.id %}
+                      <div class="comment-line">
+                        <div class="commenterImage">
+                          <img src="{{ comment.image_url }}"/>
+                        </div>
+                        <div class="commentText col col-6">
+                          <div class="high-life">
+                            <span class="sub-text">{{ comment.commenter.name | safe }}</span>
+                            {% if comment.date_time.split('.')[1].strip() == current_date %}
+                              <span class="sub-text comment-time">{{ comment.date_time.split('.')[0].strip() }}</span>
+                            {% else %}
+                              <span class="sub-text comment-time">{{ comment.date_time }}</span>
+                            {% endif %}
+                            <p class="comments-p"> {{ comment.text | safe }} </p>
+                            <input type="hidden" value="">
+                          </div>
+                        </div>
+                      </div>
+
+                      {% endif %}
+                    {% endfor %}
+                  <div>
+                    <p>
+                      {{ ckeditor.load() }}
+                      {{ ckeditor.config(name='text', width=400, height=800)}}
+                      {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}, action=url_for('show_post', post_id=post.id))}}
+                    </p>
+                  </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="col col-1"></div>
+            </div>
+          </div>
+
+      </div>
+    </div>
+  </article>
+  <hr>
+{% include "footer.html" %}
+{% endblock %}
