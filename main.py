@@ -135,7 +135,7 @@ with app.app_context():
         if not session.permanent:
             displayed_flash = True  # Sets 'displayed_flash' to True if the session is not already marked as permanent
         session.permanent = True  # Marks the session as permanent
-        app.permanent_session_lifetime = timedelta(seconds=30)  # Sets the lifetime of the session to 30 seconds
+        app.permanent_session_lifetime = timedelta(minutes=15)  # Sets the lifetime of the session to 15 minutes
         session.modified = True  # Indicates that the session has been modified
         if displayed_flash:
             flash(f"User session has expired. Please login again.",
