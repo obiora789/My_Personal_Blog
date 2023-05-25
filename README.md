@@ -6,7 +6,7 @@ The first user registered in the database is automatically given admin privilege
 
 ## Getting Started
 
-To get started with this Flask Blog, you will need to have Python 3.5 or above installed on your computer. You will also need to clone this repository to your local machine.
+To get started with my Blog, you will need to have Python 3.5 or above installed on your computer. You will also need to clone this repository to your local machine.
 
 ```
 git clone https://github.com/yourusername/flask-blog.git
@@ -23,7 +23,7 @@ pip install -r requirements.txt
 
 ## Configuring the Application
 
-Before you can run the Flask Blog, you will need to configure the application by creating a `.env` file in the root directory. The `.env` file should contain the following environment variables:
+Before you can run my Blog, you will need to configure the application by creating a `.env` file in the root directory. The `.env` file should contain the following environment variables:
 
 ```
 APP_SECRET=<your_app_secret_key>
@@ -44,7 +44,7 @@ DATABASE=<your_database_url>
 
 ## Running the Application
 
-To run the Flask Blog, navigate to the project directory and activate the virtual environment using the following command:
+To run my Blog, navigate to the project directory and activate the virtual environment using the following command:
 
 ```
 source venv/bin/activate
@@ -55,12 +55,12 @@ Then, start the Flask application using the following command:
 ```
 flask run
 ```
-If you make use of PyCharm, the instructions above may not be necessary. Simply open the project in Pycharm, install requirements and click the "▶️" button in main.py file. I used PyCharm 2022 in developing this blog.\
+If you make use of PyCharm or other python IDE, the instructions above may not be necessary. Simply open the project in Pycharm, install requirements and click the "▶️" button in main.py file. I used PyCharm 2022 in developing this blog.\
 You can then access the application by navigating to `http://localhost:5000` in your web browser.
 
 ## Using the Application
 
-To use the Flask Blog, you will need to register for an account. Once you have registered, you can log in and create, edit, and delete your posts. You can also view posts created by other users on the home page.
+To use my Blog, you simply have to click the home button to access all the articles that the admin has preloaded upfront with or without a user account your account but you will not be able to leave a comment unless you have registered your account. Once you have registered, the app logs you in automatically and your session is created. It logs you out automatically and returns to 'login' page once your user session expires (I set 15 minutes but you can always alter it). While user session is still active, you can not only access posts but comment on them as well. Remember that only the admin has the right to create, edit or delete posts. The app takes active measures to enforce this by hiding these buttons from other users, as well as preventing access to urls responsible for creating, editing or deleting posts. When you clone this app, you'll be creating your database from scratch and so you will have to create the blog posts as an admin. (If I preloaded the posts, the app will only recognise me the admin, which means you'll never have full access to the app because you don't know my password). 
 
 ## Contributing
 
