@@ -45,7 +45,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("APP_SECRET")
 ckeditor = CKEditor(app)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", f"sqlite:///{database}.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Creating a SQLAlchemy instance for our app
