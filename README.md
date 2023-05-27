@@ -70,13 +70,13 @@ While user session is still active, you can not only access posts but comment on
 
 When you clone this app, you'll be creating your database from scratch and so you will have to create the blog posts as an admin. (If I preloaded the posts, the app will only recognise me the admin, which means you'll never have full access to the app because you don't know my password). 
 
-All registered users can change their passwords to a new one whenever they forget their existing password. This takes place in three easy steps:
+All registered users can change their passwords to a new one whenever they forget their existing password. This takes place in four easy steps:
 - The affected user inputs their registered email address.
 - The app sends a unique verification code to the email address.
 - The affected user copies the verification code from the email and pastes it in the verification page in my blog.
-- The affected user is then granted the opportunity to supply their new password. 
+- If everything checks out, the affected user is then granted the opportunity to supply their new password. 
 
-Please remember that by convention, passwords cannot be your email address or any group of letters consecutively placed forming part of your email address.
+Please remember that by convention, passwords must not be your email address or any group of letters consecutively placed forming part of your email address.
 
 ## Contributing
 
