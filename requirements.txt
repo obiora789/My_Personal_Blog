@@ -4,7 +4,7 @@ Flask_CKEditor==0.4.6
 Flask_Login==0.6.2
 flask_sqlalchemy==3.0.3
 Flask_WTF==1.1.1
-libgravatar==1.0.4
+libgravatar~=1.0.4
 python-dotenv==1.0.0
 SQLAlchemy==2.0.12
 Werkzeug==2.3.3
