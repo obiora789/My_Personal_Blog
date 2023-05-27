@@ -73,7 +73,7 @@ When you clone this app, you'll be creating your database from scratch and so yo
 All registered users can change their passwords to a new one whenever they forget their existing password. This takes place in four easy steps:
 - The affected user inputs their registered email address.
 - The app sends a unique verification code to the email address.
-- The affected user copies the verification code from the email and pastes it in the verification page in my blog.
+- The affected user copies the verification code from the email received and pastes it in the verification page in my blog (Kindly check SPAM folder as well for the email if you don't receive it via Inbox).
 - If everything checks out, the affected user is then granted the opportunity to supply their new password. 
 
 Please remember that by convention, passwords must not be your email address or any group of letters consecutively placed forming part of your email address.
