@@ -187,6 +187,12 @@ img::-moz-selection {
     font-size:11px;
 }
 
+.forgot{
+    position: absolute;
+    margin-left: 15rem;
+    margin-top: -3.5rem;
+}
+
 .high-life {
     margin-bottom: 20px;
     max-width: 100%;
