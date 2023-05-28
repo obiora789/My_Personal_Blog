@@ -1,7 +1,9 @@
 # My Personal Blog
 
-This is a full-functioning blog developed using Python and Flask. The blog has basic functionalities such as authentication, registration, and posting of articles and comments.\
-The admin can create, edit, and delete posts, while other registered users can view and comment on posts created by the admin.\
+This is a full-functioning blog developed using Python and Flask. The blog has basic functionalities such as authentication, registration, and posting of articles and comments.
+
+The admin can create, edit, and delete posts, while other registered users can view and comment on posts created by the admin.
+
 The first user registered in the database is automatically given admin privileges (So you have to be careful 😉).
 
 ## Getting Started
@@ -60,7 +62,21 @@ You can then access the application by navigating to `http://localhost:5000` in 
 
 ## Using the Application
 
-To use my Blog, you simply have to click the home button to access all the articles that the admin has preloaded upfront with or without a user account your account but you will not be able to leave a comment unless you have registered your account. Once you have registered, the app logs you in automatically and your session is created. It logs you out automatically and returns to 'login' page once your user session expires (I set 15 minutes but you can always alter it). While user session is still active, you can not only access posts but comment on them as well. Remember that only the admin has the right to create, edit or delete posts. The app takes active measures to enforce this by hiding these buttons from other users, as well as preventing access to urls responsible for creating, editing or deleting posts. When you clone this app, you'll be creating your database from scratch and so you will have to create the blog posts as an admin. (If I preloaded the posts, the app will only recognise me the admin, which means you'll never have full access to the app because you don't know my password). 
+To use my Blog, you simply have to click the home button to access all the articles that the admin has preloaded upfront with or without a user account your account but you will not be able to leave a comment unless you have registered your account. 
+
+Once you have registered, the app logs you in automatically and your session is created. It logs you out automatically and returns to 'login' page once your user session expires (I set 15 minutes but you can always alter it). 
+
+While user session is still active, you can not only access posts but comment on them as well. Remember that only the admin has the right to create, edit or delete posts. The app takes active measures to enforce this by hiding these buttons from other users, as well as preventing access to urls responsible for creating, editing or deleting posts.
+
+When you clone this app, you'll be creating your database from scratch and so you will have to create the blog posts as an admin. (If I preloaded the posts, the app will only recognise me the admin, which means you'll never have full access to the app because you don't know my password). 
+
+All registered users can change their passwords to a new one whenever they forget their existing password. This takes place in four easy steps:
+- The affected user inputs their registered email address.
+- The app sends a unique verification code to the email address.
+- The affected user copies the verification code from the email received and pastes it in the verification page in my blog (Kindly check SPAM folder as well for the email if you don't receive it via Inbox).
+- If everything checks out, the affected user is then granted the opportunity to supply their new password. 
+
+Please remember that by convention, passwords must not be your email address or any group of letters consecutively placed forming part of your email address.
 
 ## Contributing
 
