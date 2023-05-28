@@ -41,6 +41,7 @@
       <div class="col-lg-8 col-md-10 mx-auto content">
         {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}, action=url_for('login'))}}
         {{ form.csrf_token }}
+          <a class="sub-text forgot" href="{{ url_for('forgot_password') }}">Forgot Password</a>
       </div>
     </div>
   </div>

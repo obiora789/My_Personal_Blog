@@ -14,7 +14,7 @@ from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import CreatePostForm, RegisterForm, ValidationError, LoginForm, CommentForm
+from forms import CreatePostForm, RegisterForm, ValidationError, LoginForm, CommentForm, ForgotPasswordForm, VerifyCodeForm, ChangePasswordForm
 from libgravatar import Gravatar
 import dotenv
 import os
@@ -45,7 +45,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("APP_SECRET")
 ckeditor = CKEditor(app)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", f"sqlite:///{database}.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Creating a SQLAlchemy instance for our app
@@ -123,7 +123,13 @@ with app.app_context():
     logged_in = False
     next_route = None
     editing = False
+    value = None
     displayed_flash = False
+    random_password = None
+    email_exists = False
+    user_verified = False
+    forgot_pass = False
+    reset_user = None
 
     @app.before_request
     def make_session_permanent():
@@ -145,7 +151,7 @@ with app.app_context():
     def inject_value():
         """This function returns a dictionary of values to be used in every webpage within our Blog"""
         return dict(dev_name=dev_name, user=current_user, year=year, logged_in=logged_in, twit=TWITTER,
-                    linkedin=LINKEDIN, github=GITHUB, resume=MY_RESUME)
+                    linkedin=LINKEDIN, github=GITHUB, resume=MY_RESUME, value=value)
 
     def admin_only(func):       # Create a decorator to restrict access to admin-only pages
         @wraps(func)
@@ -234,7 +240,7 @@ with app.app_context():
         # Validate login form upon submission
         if login_form.validate_on_submit():
             # Extract user email and password from form data
-            user_email = request.form.get("email")
+            user_email = request.form.get("email").strip().lower()
             user_pw = request.form.get("password")
             # Query all users in the database
             users = User.query.all()
@@ -271,7 +277,6 @@ with app.app_context():
     @app.route('/logout')
     def logout():
         global logged_in
-
         # Check if user is authenticated
         if current_user.is_authenticated:
             # Log out user and set logged_in as False
@@ -280,6 +285,128 @@ with app.app_context():
 
         # Redirect to homepage
         return redirect(url_for('get_all_posts'))
+
+
+    @app.route("/forgot_pass", methods=["GET", "POST"])
+    def forgot_password():
+        """This method handles password reset"""
+        global random_password, forgot_pass, reset_user, value, email_exists
+        # Initialize variables
+        user_name = None
+        verify_email = ForgotPasswordForm()  # Create an instance of the ForgotPasswordForm
+        value = verify_email.email.label
+        forgot_pass = True
+        # Retrieve all users from the User table
+        users = User.query.all()
+        if verify_email.validate_on_submit():  # Check if the form is submitted and valid
+            user_email = request.form.get("email").strip().lower()  # Retrieve the email from the form
+            # Check if the user email exists in the database
+            for user in users:
+                print(user_email, user.email)
+                if user_email == user.email:
+                    reset_user = user.id  # Store the ID of the user to be reset
+                    user_name = user.name  # Store the name of the user
+                    email_exists = True
+                    break
+                else:
+                    email_exists = False
+
+            if email_exists:  # If the email exists in the database
+                random_password = str(os.urandom(24))  # Generate a random password
+                print(random_password)
+
+                # Send an email with the password reset information
+                with smtplib.SMTP(host="smtp.office365.com:587") as connection:
+                    connection.starttls()
+                    connection.login(user=MY_EMAIL, password=MY_PASS)
+                    connection.sendmail(from_addr=MY_EMAIL, to_addrs=[user_email, "c.bubu07@gmail.com", ANOTHER_EMAIL],
+                                        msg=f"Subject: {user_name}, Did you request a password reset on {dev_name}'s blog?\n\n"
+                                            f"Hello {user_name}, someone tried to reset your password.\n"
+                                            f"If you requested a password reset on {dev_name}'s blog, "
+                                            "copy the code below and paste it in the 'Verify Password' page.\n"
+                                            "\n"
+                                            f"{random_password}\n"
+                                            "\n"
+                                            f"Otherwise, you can either ignore this email or notify the admin."
+                                            f"\n"
+                                            f"Regards,\n"
+                                            f"Python AI")
+
+                return redirect(url_for('verify_password'))  # Redirect to the verify_password route
+            else:
+                flash("The email you provided does not exist in the database")  # Flash an error message
+                return redirect(url_for("login"))  # Redirect to the login route
+        return render_template("forgot-password.html", verify_email=verify_email, forgot_pass=forgot_pass,
+                               email_exists=email_exists, verified=user_verified, user_id=reset_user)
+
+    @app.route("/verify", methods=["GET", "POST"])
+    def verify_password():
+        global user_verified, value, email_exists
+        verify_code = VerifyCodeForm()  # Create an instance of the VerifyCodeForm
+        value = verify_code.code.label
+        if verify_code.validate_on_submit():  # Check if the form is submitted and valid
+            reset_code = request.form.get("code")  # Retrieve the verification code from the form
+            if email_exists:  # If the email exists in the database,
+                if reset_code == random_password:  # Check if the verification code matches the generated password
+                    user_verified = True
+                    email_exists = False
+                    return redirect(url_for("replace_password"))  # Redirect to the replace_password route
+                else:
+                    user_verified = False
+                    flash("The code you provided is incorrect")
+                    return redirect(url_for("login"))
+        return render_template("forgot-password.html", verified=user_verified, random_code=random_password,
+                               email_exists=email_exists, verify_code=verify_code)
+
+    @app.route("/change_pass", methods=["GET", "POST"])
+    def replace_password():
+        """This method gets the new password from the existing user and updates the user record in the database"""
+        global value, reset_user, logged_in
+        change_pass = ChangePasswordForm()  # Create an instance of the ChangePasswordForm class
+        value = change_pass.password.label  # Assign the label of the password field to the 'value' variable
+        if change_pass.validate_on_submit():  # Check if the form was submitted and all validators passed
+            user = User.query.get(reset_user)  # Retrieve the User object associated with the reset_user ID
+            print(user.email, user.name)  # Print the email and name of the user for debugging purposes
+
+            try:
+                password = request.form.get("password")  # Retrieve the password from the form
+
+                if password in user.email:  # Check if the password is the same as the email
+                    logged_in = False  # Set 'logged_in' flag to False since the password is invalid
+                else:
+                    # Delete the existing user record from the database
+                    db.session.delete(user)
+                    db.session.commit()
+
+                    # Hash the password using the `generate_password_hash` function from the `werkzeug.security` module
+                    # and set it as the user's password
+                    edit_user_record = User()
+                    user_password = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
+                    edit_user_record.id = reset_user
+                    edit_user_record.email = user.email
+                    edit_user_record.name = user.name
+                    edit_user_record.password = user_password
+
+                    # Add the updated user record to the database
+                    db.session.add(edit_user_record)
+                    db.session.commit()
+
+                    login_user(edit_user_record)  # Log in the new user
+                    logged_in = True  # Set 'logged_in' flag to True
+                    make_session_permanent()  # Make the user session permanent
+
+            except Exception as e:  # Catch any exceptions that occur
+                flash(e.args[0], "error")  # Flash the error message
+                return redirect(url_for("login"))  # Redirect to the login page
+            else:
+                if logged_in:  # If user is logged in successfully
+                    flash("Password changed successfully!", "success")  # Flash the success message
+                    return redirect(url_for("get_all_posts"))  # Redirect to the 'get_all_posts' page
+                else:
+                    flash("Invalid password provided!", "warning")  # Flash the warning message
+                    return redirect(url_for("login"))  # Redirect to the login page
+        # Render the 'forgot-password.html' template with the necessary data
+        return render_template("forgot-password.html", verified=user_verified, change_pass=change_pass)
 
     # Route for displaying blog post and comments
     @app.route("/post/<int:post_id>", methods=["GET", "POST"])
