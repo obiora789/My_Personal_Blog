@@ -36,3 +36,22 @@ class LoginForm(FlaskForm):
 class CommentForm(FlaskForm):
     comment = CKEditorField("Comment", validators=[InputRequired()], render_kw={"placeholder": "Add a Comment"})
     submit = SubmitField("Submit Comment")
+
+
+class ForgotPasswordForm(FlaskForm):
+    email = EmailField("Email", validators=[InputRequired()], render_kw={"placeholder": "Enter your email"})
+    submit = SubmitField("Next")
+
+
+class VerifyCodeForm(FlaskForm):
+    code = PasswordField("Code Received", validators=[InputRequired()], render_kw={"placeholder": "Enter code received"})
+    submit = SubmitField("Verify Code")
+
+
+class ChangePasswordForm(FlaskForm):
+    password = PasswordField("New Password", validators=[InputRequired(), Length(min=8, max=60)],
+                             render_kw={"placeholder": "Enter new password"})
+    copy_password = PasswordField("Repeat Password", validators=[
+        InputRequired(), Length(min=8, max=60), EqualTo("password", message="Passwords must match!")
+    ], render_kw={"placeholder": "Repeat Password"})
+    submit = SubmitField("Change Password")
