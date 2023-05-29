@@ -35,6 +35,7 @@ MY_PASS = os.getenv("EMAIL_PASSWORD")
 ANOTHER_EMAIL = os.environ.get("OTHER_EMAIL")
 SECOND_EMAIL = os.environ.get("SECOND_EMAIL")
 mail_list = [SECOND_EMAIL, MY_EMAIL, ANOTHER_EMAIL]
+database = os.environ.get("DATABASE")
 
 # Creating a Flask app instance
 app = Flask(__name__)
@@ -43,7 +44,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("APP_SECRET")
 ckeditor = CKEditor(app)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL",  "sqlite:///blog.db").replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL",  f"sqlite:///{database}.db").replace("postgres://", "postgresql://", 1)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Creating a SQLAlchemy instance for our app
