@@ -226,11 +226,6 @@ img::-moz-selection {
   color: #343a40;
 }
 
-#navbarResponsive .navbar-nav {
-  float: right;
-  margin-right: -15px;
-}
-
 #mainNav .navbar-nav > li.nav-item > a {
   font-size: 12px;
   font-weight: 800;
@@ -258,6 +253,10 @@ img::-moz-selection {
   }
   #mainNav .navbar-nav > li.nav-item > a:focus, #mainNav .navbar-nav > li.nav-item > a:hover {
     color: rgba(255, 255, 255, 0.8);
+  }
+  #navbarResponsive .navbar-nav {
+  float: right;
+  margin-right: -15px;
   }
 }
 
@@ -291,6 +290,13 @@ img::-moz-selection {
   #mainNav.is-visible {
     /* if the user changes the scrolling direction, we show the header */
     transform: translate3d(0, 100%, 0);
+  }
+}
+
+@media only screen and (min-width: 768px;) {
+  #navbarResponsive .navbar-nav {
+    float: left;
+    margin-right: -15px;
   }
 }
 
