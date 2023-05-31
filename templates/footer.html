@@ -41,6 +41,23 @@
 
   <!-- Custom scripts for this template -->
   <script src="{{ url_for('static', filename='js/clean-blog.min.js')}}"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function(){
+        const elem = document.getElementsByTagName('link');
+        const displays = document.getElementsByTagName('script');
+        for (let j = 0; j < elem.length; j++) {
+            if (elem[j].href == 'http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'){
+                elem[j].remove();
+            }
+        }
+        for (let i = 0; i < displays.length; i++) {
+            console.log(displays[i].src)
+            if (displays[i].src == 'http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'){
+                displays[i].remove();
+            }
+        }
+    })
+</script>
 
 </body>
 
