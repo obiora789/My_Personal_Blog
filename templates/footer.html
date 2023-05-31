@@ -46,13 +46,17 @@
         const elem = document.getElementsByTagName('link');
         const displays = document.getElementsByTagName('script');
         for (let j = 0; j < elem.length; j++) {
-            if (elem[j].href == 'http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'){
+            if (elem[j].href == 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'){
+                elem[j].remove();
+            } elseif (elem[j].href == 'http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css') {
                 elem[j].remove();
             }
         }
         for (let i = 0; i < displays.length; i++) {
             console.log(displays[i].src)
-            if (displays[i].src == 'http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'){
+            if (displays[i].src == 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'){
+                displays[i].remove();
+            } elseif (displays[i].src == 'http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'){
                 displays[i].remove();
             }
         }
