@@ -47,16 +47,4 @@
   </div>
 
 {% include "footer.html" %}
-
-<script>
-    document.addEventListener("DOMContentLoaded", function(){
-        const elem = document.getElementsByTagName('link');
-        for (let j = 0; j < elem.length; j++) {
-            if (elem[j].href == 'http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'){
-                elem[j].remove();
-            }
-        }
-    })
-</script>
-
 {% endblock %}

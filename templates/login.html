@@ -42,20 +42,9 @@
         {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}, action=url_for('login'))}}
         {{ form.csrf_token }}
           <a class="sub-text forgot" href="{{ url_for('forgot_password') }}">Forgot Password</a>
-          <p id="demos"></p>
       </div>
     </div>
   </div>
 
 {% include "footer.html" %}
-<script>
-    document.addEventListener("DOMContentLoaded", function(){
-        const elem = document.getElementsByTagName('link');
-        for (let j = 0; j < elem.length; j++) {
-            if (elem[j].href == 'http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'){
-                elem[j].remove();
-            }
-        }
-    })
-</script>
 {% endblock %}
