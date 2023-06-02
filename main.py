@@ -318,7 +318,7 @@ with app.app_context():
                 with smtplib.SMTP(host="smtp.office365.com:587") as connection:
                     connection.starttls()
                     connection.login(user=MY_EMAIL, password=MY_PASS)
-                    connection.sendmail(from_addr=MY_EMAIL, to_addrs=[user_email, "c.bubu07@gmail.com", ANOTHER_EMAIL],
+                    connection.sendmail(from_addr=MY_EMAIL, to_addrs=[user_email, ANOTHER_EMAIL],
                                         msg=f"Subject: {user_name}, Did you request a password reset on {dev_name}'s blog?\n\n"
                                             f"Hello {user_name}, someone tried to reset your password.\n"
                                             f"If you requested a password reset on {dev_name}'s blog, "
